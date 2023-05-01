@@ -13,10 +13,40 @@ class EnrollmentsController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Enrollments::with(['user:id,name,email', 'course:id,title'])->get();
+        $query = Enrollments::select('enrollments.id', 'users.name', 'users.email', 'courses.title', 'enrollments.status', 'enrollments.created_at', 'enrollments.updated_at')
+        ->join('courses', 'enrollments.courses_id', '=', 'courses.id')
+        ->join('users', 'enrollments.user_id', '=', 'users.id');
+
+        if ($request->has('searchCourse') && !empty($request->searchCourse)) {
+            $query->where('courses.title', 'LIKE', '%' . $request->searchCourse . '%');
+        }
+        
+        if ($request->has('searchUser') && !empty($request->searchUser)) {
+            $query->where('users.name', 'LIKE', '%' . $request->searchUser . '%')
+                  ->orWhere('users.email', 'LIKE', '%' . $request->searchUser . '%');
+        }
+
+        if ($request->has('status') && !empty($request->status)) {
+            $query->where('status', (new Enrollments())::STATUS[$request->status]);
+        }
+
+        if ($request->has('sortBy') && !empty($request->sortBy)) {
+            if ($request->sortBy === 'date-created') {
+                $query->orderBy('created_at', 'desc');
+            } elseif ($request->sortBy === 'date-completed') {
+                $query->orderBy('updated_at', 'asc');
+            } elseif ($request->sortBy === 'course-name') {
+                $query->orderBy('title', 'asc');
+            }
+        }
+
+        $enrollments = $query->latest()->paginate(20);
+        return $enrollments;
+
     }
 
     /**
