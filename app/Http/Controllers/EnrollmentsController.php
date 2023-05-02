@@ -68,6 +68,32 @@ class EnrollmentsController extends Controller
     public function store(Request $request)
     {
         //
+        $validator = Validator::make(
+            $request->all(),
+            [
+                "user_id" => ["required"],
+                "course_id" => ["required"],
+                "status_now" => ["required"]
+            ]
+        );
+
+        if($validator->fails()) {
+            return [
+                "status" => false,
+                "errors" => $validator->messages()
+            ];
+        }
+
+        $enrollments = Enrollments::create([
+            "user_id" => $request->user_id,
+            "courses_id" => $request->course_id,
+            "status" => $request->status_now
+        ]);
+
+        return [
+            "status" => true,
+            "enrollments" => $enrollments
+        ];
     }
 
     /**
@@ -102,6 +128,28 @@ class EnrollmentsController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $validator = Validator::make(
+            $request->all(),
+            [
+                "changeStatus" => ["required"]
+            ]
+        );
+
+        if($validator->fails()) {
+            return [
+                "status" => false,
+                "errors" => $validator->messages()
+            ];
+        }
+
+        $enrollments = Enrollments::where('id', $id)->update([
+            "status" => (new Enrollments())::STATUS[$request->changeStatus]
+        ]);
+        
+        return [
+            "status" => true,
+            "enrollments" => $enrollments
+        ];
     }
 
     /**
@@ -113,5 +161,10 @@ class EnrollmentsController extends Controller
     public function destroy($id)
     {
         //
+        $enrollments = Enrollments::destroy([$id]);
+        return [
+            "status" => true,
+            "enrollments" => $id
+        ];
     }
 }

@@ -25,6 +25,7 @@
         "vue-template-compiler": "^2.7.14"
     },
     "dependencies": {
+        "bootstrap-icons": "^1.10.5",
         "laravel-vue-pagination": "^4.1.0",
         "moment": "^2.29.4",
         "vue-axios": "^3.5.2"

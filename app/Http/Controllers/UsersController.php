@@ -37,31 +37,6 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $validator = Validator::make(
-            $request->all(),
-            [
-                "name" => ["required"],
-                "email" => ["required"]
-            ]
-        );
-
-        if($validator->fails()) {
-            return [
-                "status" => false,
-                "errors" => $validator->messages()
-            ];
-        }
-
-        $users = Users::create([
-            "name" => $request->name,
-            "email" => $request->email
-        ]);
-
-        return [
-            "status" => true,
-            "users" => $users
-        ];
 
     }
 
@@ -73,15 +48,7 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        //
-        $users = Users::find($id);
-        if(!$users) {
-            return response()->json([
-                "status" => false,
-                "message" => "User not found"
-            ])->setStatusCode(code: 404);
-        }
-        return $users;
+
     }
 
     /**
