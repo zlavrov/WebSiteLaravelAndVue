@@ -2,9 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UsersController;
-use App\Http\Controllers\CoursesController;
-use App\Http\Controllers\EnrollmentsController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\EnrollmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +22,6 @@ use App\Http\Controllers\EnrollmentsController;
 // });
 
 
-Route::resource('users', UsersController::class);
-Route::resource('courses', CoursesController::class);
-Route::resource('enrollments', EnrollmentsController::class);
+Route::resource('user', UserController::class);
+Route::resource('course', CourseController::class);
+Route::resource('enrollment', EnrollmentController::class);

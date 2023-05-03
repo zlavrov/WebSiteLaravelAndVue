@@ -214,7 +214,7 @@
 
             deleteMethod() {
 
-                axios.delete("/api/enrollments/" + this.deleteNumper, {
+                axios.delete("/api/enrollment/" + this.deleteNumper, {
                     deleteNumper: this.deleteNumper
                 }).then(result => {
                     console.log(result.data);
@@ -225,7 +225,7 @@
 
             saveEditMethod() {
 
-                axios.patch("/api/enrollments/" + this.editNumper, {
+                axios.patch("/api/enrollment/" + this.editNumper, {
                     changeStatus: this.changeStatus
                 }).then(result => {
                     console.log(result.data);
@@ -271,7 +271,7 @@
 
             loadData(page = 1, perPage = 20) {
 
-                axios.get("/api/enrollments", {
+                axios.get("/api/enrollment", {
                     params: {
                         searchCourse: this.searchCourse,
                         searchUser: this.searchUser,
@@ -295,7 +295,7 @@
 
             createUser() {
 
-                axios.post("/api/enrollments", {
+                axios.post("/api/enrollment", {
                         user_id: this.form.user_id,
                         course_id: this.form.course_id,
                         status_now: this.form.status_now
@@ -304,6 +304,7 @@
                     this.form.user_id = "",
                     this.form.course_id = "",
                     this.form.status_now = ""
+                    this.loadData();
                 });
 
             },
