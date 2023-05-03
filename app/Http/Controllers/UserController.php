@@ -9,18 +9,17 @@ use Validator;
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource. // get user list GET
+     * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
         return User::all();
     }
 
     /**
-     * Show the form for creating a new resource. // show form for create user GET
+     * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
@@ -30,7 +29,7 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage. // create user POST
+     * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -64,7 +63,7 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified resource. // get user by id GET
+     * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -82,7 +81,7 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource. // show form for edit user GET
+     * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -93,7 +92,7 @@ class UserController extends Controller
     }
 
     /**
-     * Update the specified resource in storage. // update user PATCH
+     * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -101,11 +100,34 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make(
+            $request->all(),
+            [
+                "name" => ["required"],
+                "email" => ["required"]
+            ]
+        );
+
+        if($validator->fails()) {
+            return [
+                "status" => false,
+                "errors" => $validator->messages()
+            ];
+        }
+
+        $user = User::where('id', $id)->update([
+            "name" => $request->name,
+            "email" => $request->email
+        ]);
+        
+        return [
+            "status" => true,
+            "user" => $user
+        ];
     }
 
     /**
-     * Remove the specified resource from storage. // delete user DELETE
+     * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response

@@ -66,7 +66,6 @@ class EnrollmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $validator = Validator::make(
             $request->all(),
             [
@@ -103,7 +102,14 @@ class EnrollmentController extends Controller
      */
     public function show($id)
     {
-        //
+        $enrollment = Enrollment::find($id);
+        if(!$enrollment) {
+            return response()->json([
+                "status" => false,
+                "message" => "Enrollment not found"
+            ])->setStatusCode(code: 404);
+        }
+        return $enrollment;
     }
 
     /**
@@ -126,7 +132,6 @@ class EnrollmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
         $validator = Validator::make(
             $request->all(),
             [
@@ -159,7 +164,6 @@ class EnrollmentController extends Controller
      */
     public function destroy($id)
     {
-        //
         $enrollment = Enrollment::destroy([$id]);
         return [
             "status" => true,

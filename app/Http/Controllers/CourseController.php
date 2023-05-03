@@ -15,7 +15,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        //
+        return Course::all();
     }
 
     /**
@@ -69,7 +69,14 @@ class CourseController extends Controller
      */
     public function show($id)
     {
-        //
+        $course = Course::find($id);
+        if(!$course) {
+            return response()->json([
+                "status" => false,
+                "message" => "Course not found"
+            ])->setStatusCode(code: 404);
+        }
+        return $course;
     }
 
     /**
@@ -92,7 +99,28 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make(
+            $request->all(),
+            [
+                "title" => ["required"]
+            ]
+        );
+
+        if($validator->fails()) {
+            return [
+                "status" => false,
+                "errors" => $validator->messages()
+            ];
+        }
+
+        $course = Course::where('id', $id)->update([
+            "title" => $request->title
+        ]);
+        
+        return [
+            "status" => true,
+            "course" => $course
+        ];
     }
 
     /**
