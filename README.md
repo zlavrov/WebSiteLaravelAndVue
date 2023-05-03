@@ -1,6 +1,6 @@
 # How to get
 
- -> git clone ...
+- git clone ...
 
 # How to start
 
